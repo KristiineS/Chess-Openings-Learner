@@ -1,3 +1,4 @@
+import os
 from itertools import product
 
 import pyglet
@@ -52,6 +53,7 @@ class Settings:
         pieces = ["Rook", "Knight", "Bishop", "King", "Queen", "Pawn"]
         colors = ["white", "black"]
         for piece, color in product(pieces, colors):
-            picture = pyglet.image.load(''.join(['C:/Users/Christine/Documents/Programming/Chess/Pictures/', color, piece, '.png']))
+            picture = pyglet.image.load(
+                ''.join([os.path.dirname(os.path.dirname(os.getcwd())) + '/Pictures/', color, piece, '.png']))
             dictionary[''.join([color, piece])] = picture
         return dictionary

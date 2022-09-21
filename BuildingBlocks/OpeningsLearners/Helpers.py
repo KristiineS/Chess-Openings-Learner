@@ -15,7 +15,7 @@ def get_first_board_state():
     return matrix
 
 
-# Enumerate all of the occurring states
+# Enumerate all the occurring states
 def get_board_state_dictionary():
     openings = [item for sublist in lines_to_matrices() for item in sublist[1]]
     board_states_enumerated = [(0, get_first_board_state())]

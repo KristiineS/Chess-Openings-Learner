@@ -1,7 +1,7 @@
 import pygame
 
-from Initialize import initialize_board, initialize_pieces
-from Settings import Settings
+from BuildingBlocks.Initialize import initialize_board, initialize_pieces
+from BuildingBlocks.Classes.Settings import Settings
 from Visualize import show_possible_moves, show_possible_captures, show_possible_castling, update_screen, update_board, castle_king
 
 

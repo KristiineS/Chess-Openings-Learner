@@ -1,3 +1,4 @@
+import os
 import re
 from copy import deepcopy
 
@@ -15,7 +16,7 @@ from BuildingBlocks.Pieces.Rook import Rook
 
 def lines_to_matrices():
     lines = read_lines(
-        r"C:\Users\Christine\Documents\Programming\Chess\BuildingBlocks\OpeningsLearners\Lines\clean_lines.txt")
+        r"" + os.getcwd() + "\Lines\clean_lines.txt")
     matrix_lists = []
     for (name, moves, parameters) in lines:
         # Initialize the board representation of the game
