@@ -10,17 +10,19 @@ from BuildingBlocks.Classes.Settings import Settings
 
 class Square:
     def __init__(self, x: int, y: int, tile_color: str, settings: Settings):
-        self.x = x  # index
-        self.y = y  # index
+        # Square number 0-7
+        self.x = x
+        self.y = y
 
+        # Square corner in pixels
         self.x_coordinate = x * settings.tile_size if settings.player_color else (7 - x) * settings.tile_size
         self.y_coordinate = y * settings.tile_size if settings.player_color else (7 - y) * settings.tile_size
 
         self.letter = str(list(string.ascii_lowercase)[x])  # A-H tile letter
         self.number = str(y + 1)  # 1-8 tile number
-
         self.tile_color = tile_color
 
+        # For visualization
         self.piece = None  # None or piece
         self.marked = None  # None or color
         self.promotions = None  # None or color

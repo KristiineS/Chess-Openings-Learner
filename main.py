@@ -14,7 +14,7 @@ from BuildingBlocks.MoveLogic import drag_piece, click_piece
 
 
 # General settings
-settings = Settings(player_color=False, show_tile_labels=False,
+settings = Settings(player_color=False,
                     possible_moves_color="grey", possible_captures_color="red", possible_castling_color="black",
                     possible_promotions_color="green", possible_en_passant_color="gray", last_move_color="yellow",
                     tile_size=60, white_tile_color="white", black_tile_color="Sienna")
@@ -30,7 +30,7 @@ initialize_pieces(board, "black")
 start_pos_x, start_pos_y, stop_pos_x, stop_pos_y = 0, 0, 0, 0
 
 # Initialize the game
-game = Game(player_color=settings.player_color, opening=1)  # playing with white, learning one line
+game = Game(player_color=settings.player_color)  # playing with white
 game.board_states[0] = deepcopy(board)
 game.matrices[0] = add_matrix(board)
 opening_lines_unflattened = lines_to_matrices()

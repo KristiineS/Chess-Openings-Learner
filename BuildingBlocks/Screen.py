@@ -7,14 +7,6 @@ def update_screen(board, game, settings):
             if (i, j) in last_move:
                 board[i][j].display_last_move(settings.tile_size, settings.last_move_color)
 
-            # TODO - delete
-            # if (i, j) in game.under_fire:
-            #     ts = settings.tile_size
-            #     rect = shapes.Rectangle(board[i][j].x_coordinate, board[i][j].y_coordinate,
-            #                             width=ts, height=ts, color=webcolors.name_to_rgb("red"))
-            #     rect.opacity = 200
-            #     rect.draw()
-
             if board[i][j].piece:
                 board[i][j].display_piece(settings.tile_size, settings.dict_of_pictures)
             if board[i][j].marked:

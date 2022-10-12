@@ -16,15 +16,15 @@ from BuildingBlocks.Pieces.Rook import Rook
 
 def lines_to_matrices():
     lines = read_lines(
-        r"" + os.getcwd() + "\Lines\clean_lines.txt")
+        r"" + os.getcwd() + "//BuildingBlocks//OpeningsLearners//Lines//clean_lines.txt")
     matrix_lists = []
     for (name, moves, parameters) in lines:
         # Initialize the board representation of the game
-        settings = Settings(player_color=False, show_tile_labels=False,
+        settings = Settings(player_color=False,
                             possible_moves_color="grey", possible_captures_color="red", possible_castling_color="black",
                             possible_promotions_color="green", possible_en_passant_color="gray",
                             last_move_color="yellow",
-                            tile_size=75, white_tile_color="white", black_tile_color="Sienna")
+                            tile_size=90, white_tile_color="white", black_tile_color="Sienna")
         board = initialize_board(settings)
         initialize_pieces(board, "white")
         initialize_pieces(board, "black")

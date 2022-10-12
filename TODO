@@ -1,9 +1,11 @@
 ! TODO !
 (!) Move notation for all (check(+), checkmate(#), ambiguous, pawn capture)
-(Account for spaces after the move number)
+Check fire in a different manner, not in a list by Game.py
+
 
 ! Bugs !
-(!!) Clicking bug
+Clicking bug
+
 
 ! Moves !
 Check - notation, castling, check on king, movement of king, movement of pinned pieces
@@ -12,15 +14,16 @@ Check - notation, castling, check on king, movement of king, movement of pinned 
         #  if king is moved, always check if it is not moved into a checked square
 (Checkmate)
 
+
 ! Visual !
-(Dynamic size)
-(Show captured pieces + score + player name)
 (Draw arrows for moves)
 (Forwards/backwards movement (with arrow))
-New window - show opening lines, possible transpositions, etc.
+(Choose the colors for dots, the board, etc.)
 
-(! Rules !)
+
+! Rules !
 (Stalemate)
 (Threefold repetition)
 (Fifty-move repetition)
 (Insufficient material)
+

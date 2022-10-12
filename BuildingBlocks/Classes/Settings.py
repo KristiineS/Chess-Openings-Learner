@@ -5,11 +5,10 @@ import pyglet
 
 
 class Settings:
-    def __init__(self, player_color: bool, show_tile_labels: bool, possible_moves_color: str, possible_captures_color: str,
+    def __init__(self, player_color: bool, possible_moves_color: str, possible_captures_color: str,
                  possible_castling_color: str, possible_promotions_color: str, possible_en_passant_color: str,
                  last_move_color: str, tile_size: int, white_tile_color: str, black_tile_color: str):
         self.player_color = player_color  # True: white, False: black
-        self.show_tile_labels = show_tile_labels
 
         # possible moves colors
         self.possible_moves_color = possible_moves_color
@@ -54,6 +53,6 @@ class Settings:
         colors = ["white", "black"]
         for piece, color in product(pieces, colors):
             picture = pyglet.image.load(
-                ''.join([os.path.dirname(os.path.dirname(os.getcwd())) + '/Pictures/', color, piece, '.png']))
+                ''.join([os.getcwd() + '/Pictures/', color, piece, '.png']))
             dictionary[''.join([color, piece])] = picture
         return dictionary

@@ -2,8 +2,8 @@ import numpy as np
 
 
 class Game:
-    def __init__(self, player_color: bool, opening: int):
-        # track board states, moves, captures and matrices
+    def __init__(self, player_color: bool):
+        # track board states, moves, captures and matricesu
         self.board_states = np.empty(5899, dtype=np)
         self.matrices = np.empty(5899, dtype=np)
         self.white_moves = []
@@ -20,6 +20,3 @@ class Game:
         self.fire_by_white_pieces = set()
         self.fire_by_black_pieces = set()
         self.under_fire = set()
-        # set if or which openings learner is being used
-        # 0 - none, 1 - one line, 2 - multiple lines
-        self.opening = opening

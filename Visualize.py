@@ -70,6 +70,7 @@ def update_board(board, selected_square, move_piece, screen, settings):
 def update_screen(board, screen, settings):
     for i in range(8):
         for j in range(8):
-            board[i][j].display_tile(screen, settings)
+            board[i][j].display_tile(tile_size=settings.tile_size, white_tile_color=settings.white_tile_color,
+                                     black_tile_color=settings.black_tile_color)
             if board[i][j].piece:
-                board[i][j].display_piece(screen, settings)
+                board[i][j].display_piece(tile_size=settings.tile_size, dict_of_pictures=settings.dict_of_pictures)
