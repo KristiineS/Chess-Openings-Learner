@@ -1,6 +1,7 @@
 ! TODO !
 (!) Move notation for all (check(+), checkmate(#), ambiguous, pawn capture)
 Check fire in a different manner, not in a list by Game.py
+How to compare board states??
 
 
 ! Bugs !

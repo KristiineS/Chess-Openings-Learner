@@ -5,9 +5,8 @@ import pyglet
 from BuildingBlocks.CheckOrMate import check_if_check
 from BuildingBlocks.Classes.Game import Game
 from BuildingBlocks.Initialize import initialize_board, initialize_pieces
-from BuildingBlocks.OpeningsLearners.Helpers import add_matrix
 from BuildingBlocks.OpeningsLearners.ResponseMoves import response_move
-from BuildingBlocks.OpeningsLearners.StringToMatrix import lines_to_matrices
+from BuildingBlocks.OpeningsLearners.ReadLines import read_lines
 from BuildingBlocks.Screen import update_screen, click_square
 from BuildingBlocks.Classes.Settings import Settings
 from BuildingBlocks.MoveLogic import drag_piece, click_piece
@@ -32,14 +31,14 @@ start_pos_x, start_pos_y, stop_pos_x, stop_pos_y = 0, 0, 0, 0
 # Initialize the game
 game = Game(player_color=settings.player_color)  # playing with white
 game.board_states[0] = deepcopy(board)
-game.matrices[0] = add_matrix(board)
-opening_lines_unflattened = lines_to_matrices()
-opening_lines = [item for sublist in opening_lines_unflattened for item in sublist[1]]
-response_move(board, game, settings, opening_lines_unflattened)
+lines = read_lines("BuildingBlocks/OpeningsLearners/Lines/clean_lines.txt")
 
 
 @game_window.event
 def on_draw():
+    global game, board
+    if game.player_color != game.whose_turn:
+        game, board = response_move(board, game, settings, lines)
     game_window.clear()
     update_screen(board, game, settings)
 
@@ -52,25 +51,23 @@ def on_mouse_press(x, y, button, modifiers):
 
 @game_window.event
 def on_mouse_release(x, y, button, modifiers):
-    global start_pos_x, start_pos_y, stop_pos_x, stop_pos_y, game
+    global start_pos_x, start_pos_y, stop_pos_x, stop_pos_y, game, board
 
-    if game.player_color != game.whose_turn:
-        response_move(board, game, settings, opening_lines_unflattened)
-    else:
+    if game.player_color == game.whose_turn:
         stop_pos_x, stop_pos_y = x, y
         # right the button is clicked/dragged
         if button == 1:
             # dragged, not clicked
             if start_pos_x != stop_pos_x and start_pos_y != stop_pos_y:
                 # check if valid movement
-                start_piece = click_square(board, start_pos_x, start_pos_y, settings.tile_size)
-                if start_piece:
+                start_piece_square = click_square(board, start_pos_x, start_pos_y, settings.tile_size)
+                if start_piece_square:
                     # check that the player clicked their own piece
-                    if game.whose_turn and start_piece.piece and start_piece.piece.color == "white" \
-                            or not game.whose_turn and start_piece.piece and start_piece.piece.color == "black":
+                    if game.whose_turn and start_piece_square.piece and start_piece_square.piece.color == "white" \
+                            or not game.whose_turn and start_piece_square.piece and start_piece_square.piece.color == "black":
                         selected_square = click_square(board, stop_pos_x, stop_pos_y, settings.tile_size)  # False or Square
                         if selected_square:
-                            drag_piece(game, board, settings, start_piece, selected_square, x, y)
+                            drag_piece(game, board, settings, start_piece_square, selected_square, x, y)
             # clicked, not dragged
             else:
                 selected_square = click_square(board, stop_pos_x, stop_pos_y, settings.tile_size)  # False or Square

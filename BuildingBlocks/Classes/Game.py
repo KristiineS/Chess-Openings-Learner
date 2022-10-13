@@ -3,9 +3,8 @@ import numpy as np
 
 class Game:
     def __init__(self, player_color: bool):
-        # track board states, moves, captures and matricesu
+        # track board states, moves, captures and matrices
         self.board_states = np.empty(5899, dtype=np)
-        self.matrices = np.empty(5899, dtype=np)
         self.white_moves = []
         self.black_moves = []
         self.move_number = 0
