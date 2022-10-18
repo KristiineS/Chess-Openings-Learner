@@ -52,11 +52,13 @@ class Bishop:
         temp_1 = self.x - 1
         temp_2 = self.y - 1
         while not (temp_1 < 0 or temp_2 < 0):
-            if board[temp_1][temp_2].piece and board[temp_1][temp_2].piece.color == self.color:
-                break
-            if board[temp_1][temp_2].piece and board[temp_1][temp_2].piece.color != self.color:
-                possible_captures.append((temp_1, temp_2))
-                break
+            if board[temp_1][temp_2].piece:
+                if board[temp_1][temp_2].piece.color == self.color:
+                    break
+            if board[temp_1][temp_2].piece:
+                if board[temp_1][temp_2].piece.color != self.color:
+                    possible_captures.append((temp_1, temp_2))
+                    break
             temp_1 -= 1
             temp_2 -= 1
 
@@ -64,11 +66,13 @@ class Bishop:
         temp_3 = self.x + 1
         temp_4 = self.y - 1
         while not (temp_3 > 7 or temp_4 < 0):
-            if board[temp_3][temp_4].piece and board[temp_3][temp_4].piece.color == self.color:
-                break
-            if board[temp_3][temp_4].piece and board[temp_3][temp_4].piece.color != self.color:
-                possible_captures.append((temp_3, temp_4))
-                break
+            if board[temp_3][temp_4].piece:
+                if board[temp_3][temp_4].piece.color == self.color:
+                    break
+            if board[temp_3][temp_4].piece:
+                if board[temp_3][temp_4].piece.color != self.color:
+                    possible_captures.append((temp_3, temp_4))
+                    break
             temp_3 += 1
             temp_4 -= 1
 
@@ -76,11 +80,13 @@ class Bishop:
         temp_5 = self.x + 1
         temp_6 = self.y + 1
         while not (temp_5 > 7 or temp_6 > 7):
-            if board[temp_5][temp_6].piece and board[temp_5][temp_6].piece.color == self.color:
-                break
-            if board[temp_5][temp_6].piece and board[temp_5][temp_6].piece.color != self.color:
-                possible_captures.append((temp_5, temp_6))
-                break
+            if board[temp_5][temp_6].piece:
+                if board[temp_5][temp_6].piece.color == self.color:
+                    break
+            if board[temp_5][temp_6].piece:
+                if board[temp_5][temp_6].piece.color != self.color:
+                    possible_captures.append((temp_5, temp_6))
+                    break
             temp_5 += 1
             temp_6 += 1
 
@@ -88,11 +94,13 @@ class Bishop:
         temp_7 = self.x - 1
         temp_8 = self.y + 1
         while not (temp_7 < 0 or temp_8 > 7):
-            if board[temp_7][temp_8].piece and board[temp_7][temp_8].piece.color == self.color:
-                break
-            if board[temp_7][temp_8].piece and board[temp_7][temp_8].piece.color != self.color:
-                possible_captures.append((temp_7, temp_8))
-                break
+            if board[temp_7][temp_8].piece:
+                if board[temp_7][temp_8].piece.color == self.color:
+                    break
+            if board[temp_7][temp_8].piece:
+                if board[temp_7][temp_8].piece.color != self.color:
+                    possible_captures.append((temp_7, temp_8))
+                    break
             temp_7 -= 1
             temp_8 += 1
 

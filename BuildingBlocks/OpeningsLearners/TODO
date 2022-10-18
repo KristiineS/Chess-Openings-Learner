@@ -1,0 +1,10 @@
+TODO:
++ 1) Read opening lines to line + name
++ 2) Check for the board state all possible moves
+  3.0) Opening lines to board states
+  3) Match the possible moves to opening lines
+
+
++ 4) Select one at random (later by weights or by history)
++ 5) Check if line is finished
+6) Select only some lines

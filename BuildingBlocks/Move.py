@@ -3,6 +3,7 @@ from copy import deepcopy
 from BuildingBlocks.Pieces.Bishop import Bishop
 from BuildingBlocks.Pieces.Knight import Knight
 from BuildingBlocks.Pieces.Queen import Queen
+from BuildingBlocks.Pieces.Rook import Rook
 
 
 # castle the king
@@ -44,12 +45,20 @@ def update_board(board, selected_square, game):
     # add moves to the "made moves" list with game notation
     if game.move_piece.color == "white":
         if board[selected_square_x][selected_square_y].piece:
-            game.white_moves.append(''.join([game.move_piece.abbreviation, 'x', selected_square.letter, selected_square.number]))
+            if game.move_piece.name == "Pawn":
+                game.white_moves.append(''.join([board[game.move_piece.x][game.move_piece.y].letter,
+                              'x', selected_square.letter, selected_square.number]))
+            else:
+                game.white_moves.append(''.join([game.move_piece.abbreviation, 'x', selected_square.letter, selected_square.number]))
         else:
             game.white_moves.append(''.join([game.move_piece.abbreviation, selected_square.letter, selected_square.number]))
     else:
         if board[selected_square_x][selected_square_y].piece:
-            game.black_moves.append(''.join([game.move_piece.abbreviation, 'x', selected_square.letter, selected_square.number]))
+            if game.move_piece.name == "Pawn":
+                game.black_moves.append(''.join([board[game.move_piece.x][game.move_piece.y].letter,
+                                                 'x', selected_square.letter, selected_square.number]))
+            else:
+                game.black_moves.append(''.join([game.move_piece.abbreviation, 'x', selected_square.letter, selected_square.number]))
         else:
             game.black_moves.append(''.join([game.move_piece.abbreviation, selected_square.letter, selected_square.number]))
     # deepcopy the piece
@@ -93,7 +102,7 @@ def select_promotion(square, x, y, color, tile_size, game):
 
         # Promote to a rook
         else:
-            square.piece = (square.x, square.y, color)
+            square.piece = Rook(square.x, square.y, color)
             square.piece.has_not_moved = False
             if color == "white":
                 game.white_moves.append(''.join([square.letter, square.number, '=R']))
@@ -142,11 +151,11 @@ def en_passant(game, board, selected_square):
     if game.move_piece.color == "white":
         board[selected_square_x][selected_square_y - 1].piece = None
         game.white_moves.append(
-            ''.join([game.move_piece.abbreviation, 'x', selected_square.letter, selected_square.number]))
+            ''.join([board[game.move_piece.x][game.move_piece.y].letter, 'x', selected_square.letter, selected_square.number]))
     else:
         board[selected_square_x][selected_square_y + 1].piece = None
         game.black_moves.append(
-            ''.join([game.move_piece.abbreviation, 'x', selected_square.letter, selected_square.number]))
+            ''.join([board[game.move_piece.x][game.move_piece.y].letter, 'x', selected_square.letter, selected_square.number]))
     board[selected_square_x][selected_square_y].piece = deepcopy(game.move_piece)
     board[selected_square_x][selected_square_y].piece.x = selected_square_x
     board[selected_square_x][selected_square_y].piece.y = selected_square_y

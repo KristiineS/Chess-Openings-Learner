@@ -1,11 +1,7 @@
 ! TODO !
-(!) Move notation for all (check(+), checkmate(#), ambiguous, pawn capture)
-Check fire in a different manner, not in a list by Game.py
-How to compare board states??
-
-
-! Bugs !
-Clicking bug
++ Bug - clicking not working instantly after dragging
+Bug - En passant response error
+Rework drag_piece
 
 
 ! Moves !
@@ -16,15 +12,12 @@ Check - notation, castling, check on king, movement of king, movement of pinned 
 (Checkmate)
 
 
+! Other !
+(!) Move notation for all (check(+), checkmate(#), ambiguous)
+Check fire in a different manner, not in a list by Game.py
+Combine player color and player color name
+
+
 ! Visual !
-(Draw arrows for moves)
 (Forwards/backwards movement (with arrow))
-(Choose the colors for dots, the board, etc.)
-
-
-! Rules !
-(Stalemate)
-(Threefold repetition)
-(Fifty-move repetition)
-(Insufficient material)
-
+(Dragging visualization)

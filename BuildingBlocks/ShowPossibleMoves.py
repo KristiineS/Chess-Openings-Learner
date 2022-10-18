@@ -36,4 +36,4 @@ def show_possible_en_passant(board, move_piece, possible_en_passant_color, last_
     # color the possible en passant
     possible_en_passant = move_piece.possible_en_passant(last_moved_piece, previous_board_state)
     if possible_en_passant:
-        board[possible_en_passant[0]][possible_en_passant[1]].marked = possible_en_passant_color
+        board[possible_en_passant[0][0]][possible_en_passant[0][1]].marked = possible_en_passant_color

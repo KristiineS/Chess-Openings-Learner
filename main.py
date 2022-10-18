@@ -2,7 +2,7 @@ from copy import deepcopy
 
 import pyglet
 
-from BuildingBlocks.CheckOrMate import check_if_check
+from BuildingBlocks.CheckOrMate import check_if_check, find_king
 from BuildingBlocks.Classes.Game import Game
 from BuildingBlocks.Initialize import initialize_board, initialize_pieces
 from BuildingBlocks.OpeningsLearners.ResponseMoves import response_move
@@ -13,9 +13,9 @@ from BuildingBlocks.MoveLogic import drag_piece, click_piece
 
 
 # General settings
-settings = Settings(player_color=False,
+settings = Settings(player_color=True,
                     possible_moves_color="grey", possible_captures_color="red", possible_castling_color="black",
-                    possible_promotions_color="green", possible_en_passant_color="gray", last_move_color="yellow",
+                    possible_promotions_color="green", possible_en_passant_color="red", last_move_color="yellow",
                     tile_size=60, white_tile_color="white", black_tile_color="Sienna")
 
 # Define Pyglet window
@@ -29,16 +29,17 @@ initialize_pieces(board, "black")
 start_pos_x, start_pos_y, stop_pos_x, stop_pos_y = 0, 0, 0, 0
 
 # Initialize the game
-game = Game(player_color=settings.player_color)  # playing with white
+game = Game(player_color_name=settings.player_color_name)  # playing with white
 game.board_states[0] = deepcopy(board)
 lines = read_lines("BuildingBlocks/OpeningsLearners/Lines/clean_lines.txt")
+opening_lines = lines
 
 
 @game_window.event
 def on_draw():
     global game, board
     if game.player_color != game.whose_turn:
-        game, board = response_move(board, game, settings, lines)
+        game, board = response_move(board, game, settings, opening_lines)
     game_window.clear()
     update_screen(board, game, settings)
 
@@ -53,6 +54,7 @@ def on_mouse_press(x, y, button, modifiers):
 def on_mouse_release(x, y, button, modifiers):
     global start_pos_x, start_pos_y, stop_pos_x, stop_pos_y, game, board
 
+    print(game.white_in_check, game.black_in_check)
     if game.player_color == game.whose_turn:
         stop_pos_x, stop_pos_y = x, y
         # right the button is clicked/dragged
@@ -71,20 +73,24 @@ def on_mouse_release(x, y, button, modifiers):
             # clicked, not dragged
             else:
                 selected_square = click_square(board, stop_pos_x, stop_pos_y, settings.tile_size)  # False or Square
-                # check that the player clicked their own piece
-                if game.move_piece and (game.whose_turn and game.move_piece.color == "white"
-                                        or not game.whose_turn and game.move_piece.color == "black") \
-                        or selected_square.piece and (game.whose_turn and selected_square.piece.color == "white"
-                                                      or not game.whose_turn and selected_square.piece.color == "black"):
-                    # a piece or a square has been selected
-                    if selected_square:
+                # check if legal move
+                if selected_square:
+                    if not selected_square.piece:
                         click_piece(game, board, settings, selected_square, x, y)
-        if game.whose_turn:     # white's turn
+                    else:
+                        if game.move_piece:
+                            click_piece(game, board, settings, selected_square, x, y)
+                        else:
+                            if selected_square.piece.color == "white" and game.whose_turn \
+                                or selected_square.piece.color == "black" and not game.whose_turn:
+                                click_piece(game, board, settings, selected_square, x, y)
+
+        if game.whose_turn:    # white's turn
             game.fire_by_black_pieces = check_if_check(board, game)
+            game.white_in_check = True if find_king(board, game.player_color_name) in game.fire_by_black_pieces else False
         else:   # black's turn
             game.fire_by_white_pieces = check_if_check(board, game)
-
-        game.under_fire = check_if_check(board, game)
+            game.black_in_check = True if find_king(board, game.player_color_name) in game.fire_by_white_pieces else False
 
 
 @game_window.event

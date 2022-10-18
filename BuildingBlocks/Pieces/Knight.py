@@ -11,81 +11,96 @@ class Knight:
 
     def possible_moves(self, board):
         possible_new_squares = []
-        if 7 >= self.x - 1 >= 0:
+        if self.x - 1 >= 0:
             # left 2 down
-            if 7 >= self.y - 2 >= 0 and board[self.x - 1][self.y - 2].piece is None:
-                possible_new_squares.append((self.x - 1, self.y - 2))
+            if self.y - 2 >= 0:
+                if board[self.x - 1][self.y - 2].piece is None:
+                    possible_new_squares.append((self.x - 1, self.y - 2))
             # left 2 up
-            if 7 >= self.y + 2 >= 0 and board[self.x - 1][self.y + 2].piece is None:
-                possible_new_squares.append((self.x - 1, self.y + 2))
+            if 7 >= self.y + 2:
+                if board[self.x - 1][self.y + 2].piece is None:
+                    possible_new_squares.append((self.x - 1, self.y + 2))
 
-        if 0 <= self.x + 2 <= 7:
+        if self.x + 2 <= 7:
             # 2 right down
-            if 0 <= self.y - 1 <= 7 and board[self.x + 2][self.y - 1].piece is None:
-                possible_new_squares.append((self.x + 2, self.y - 1))
+            if 0 <= self.y - 1:
+                if board[self.x + 2][self.y - 1].piece is None:
+                    possible_new_squares.append((self.x + 2, self.y - 1))
             # 2 right up
-            if 0 <= self.y + 1 <= 7 and board[self.x + 2][self.y + 1].piece is None:
-                possible_new_squares.append((self.x + 2, self.y + 1))
+            if self.y + 1 <= 7:
+                if board[self.x + 2][self.y + 1].piece is None:
+                    possible_new_squares.append((self.x + 2, self.y + 1))
 
-        if 7 >= self.x + 1 >= 0:
+        if 7 >= self.x + 1:
             # right 2 down
-            if 7 >= self.y - 2 >= 0 and board[self.x + 1][self.y - 2].piece is None:
-                possible_new_squares.append((self.x + 1, self.y - 2))
+            if self.y - 2 >= 0:
+                if board[self.x + 1][self.y - 2].piece is None:
+                    possible_new_squares.append((self.x + 1, self.y - 2))
             # right 2 up
-            if 7 >= self.y + 2 >= 0 and board[self.x + 1][self.y + 2].piece is None:
-                possible_new_squares.append((self.x + 1, self.y + 2))
+            if 7 >= self.y + 2:
+                if board[self.x + 1][self.y + 2].piece is None:
+                    possible_new_squares.append((self.x + 1, self.y + 2))
 
-        if 0 <= self.x - 2 <= 7:
+        if 0 <= self.x - 2:
             # 2 left up
-            if 0 <= self.y + 1 <= 7 and board[self.x - 2][self.y + 1].piece is None:
-                possible_new_squares.append((self.x - 2, self.y + 1))
+            if self.y + 1 <= 7:
+                if board[self.x - 2][self.y + 1].piece is None:
+                    possible_new_squares.append((self.x - 2, self.y + 1))
             # 2 left down
-            if 0 <= self.y - 1 <= 7 and board[self.x - 2][self.y - 1].piece is None:
-                possible_new_squares.append((self.x - 2, self.y - 1))
+            if 0 <= self.y - 1:
+                if board[self.x - 2][self.y - 1].piece is None:
+                    possible_new_squares.append((self.x - 2, self.y - 1))
 
         return possible_new_squares
 
     def possible_captures(self, board):
         possible_captures = []
 
-        if 7 >= self.x - 1 >= 0:
+        if self.x - 1 >= 0:
             # left 2 down
-            if 7 >= self.y - 2 >= 0 and board[self.x - 1][self.y - 2].piece and \
-                    board[self.x - 1][self.y - 2].piece.color != self.color:
-                possible_captures.append((self.x - 1, self.y - 2))
+            if self.y - 2 >= 0:
+                if board[self.x - 1][self.y - 2].piece:
+                    if board[self.x - 1][self.y - 2].piece.color != self.color:
+                        possible_captures.append((self.x - 1, self.y - 2))
             # left 2 up
-            if 7 >= self.y + 2 >= 0 and board[self.x - 1][self.y + 2].piece and \
-                    board[self.x - 1][self.y + 2].piece.color != self.color:
-                possible_captures.append((self.x - 1, self.y + 2))
+            if 7 >= self.y + 2:
+                if board[self.x - 1][self.y + 2].piece:
+                    if board[self.x - 1][self.y + 2].piece.color != self.color:
+                        possible_captures.append((self.x - 1, self.y + 2))
 
-        if 0 <= self.x + 2 <= 7:
+        if self.x + 2 <= 7:
             # 2 right down
-            if 0 <= self.y - 1 <= 7 and board[self.x + 2][self.y - 1].piece and \
-                    board[self.x + 2][self.y - 1].piece.color != self.color:
-                possible_captures.append((self.x + 2, self.y - 1))
+            if 0 <= self.y - 1:
+                if board[self.x + 2][self.y - 1].piece:
+                    if board[self.x + 2][self.y - 1].piece.color != self.color:
+                        possible_captures.append((self.x + 2, self.y - 1))
             # 2 right up
-            if 0 <= self.y + 1 <= 7 and board[self.x + 2][self.y + 1].piece and \
-                    board[self.x + 2][self.y + 1].piece.color != self.color:
-                possible_captures.append((self.x + 2, self.y + 1))
+            if self.y + 1 <= 7:
+                if board[self.x + 2][self.y + 1].piece:
+                    if board[self.x + 2][self.y + 1].piece.color != self.color:
+                        possible_captures.append((self.x + 2, self.y + 1))
 
-        if 7 >= self.x + 1 >= 0:
+        if 7 >= self.x + 1:
             # right 2 down
-            if 7 >= self.y - 2 >= 0 and board[self.x + 1][self.y - 2].piece and \
-                    board[self.x + 1][self.y - 2].piece.color != self.color:
-                possible_captures.append((self.x + 1, self.y - 2))
+            if self.y - 2 >= 0:
+                if board[self.x + 1][self.y - 2].piece:
+                    if board[self.x + 1][self.y - 2].piece.color != self.color:
+                        possible_captures.append((self.x + 1, self.y - 2))
             # right 2 up
-            if 7 >= self.y + 2 >= 0 and board[self.x + 1][self.y + 2].piece and \
-                    board[self.x + 1][self.y + 2].piece.color != self.color:
-                possible_captures.append((self.x + 1, self.y + 2))
+            if 7 >= self.y + 2:
+                if board[self.x + 1][self.y + 2].piece:
+                    if board[self.x + 1][self.y + 2].piece.color != self.color:
+                        possible_captures.append((self.x + 1, self.y + 2))
 
-        if 0 <= self.x - 2 <= 7:
+        if 0 <= self.x - 2:
             # 2 left up
-            if 0 <= self.y + 1 <= 7 and board[self.x - 2][self.y + 1].piece and \
-                    board[self.x - 2][self.y + 1].piece.color != self.color:
-                possible_captures.append((self.x - 2, self.y + 1))
+            if self.y + 1 <= 7:
+                if board[self.x - 2][self.y + 1].piece:
+                    if board[self.x - 2][self.y + 1].piece.color != self.color:
+                        possible_captures.append((self.x - 2, self.y + 1))
             # 2 left down
-            if 0 <= self.y - 1 <= 7 and board[self.x - 2][self.y - 1].piece and \
+            if 0 <= self.y - 1 and board[self.x - 2][self.y - 1].piece and \
                     board[self.x - 2][self.y - 1].piece.color != self.color:
-                possible_captures.append((self.x - 2, self.y - 1))
+                        possible_captures.append((self.x - 2, self.y - 1))
 
         return possible_captures
