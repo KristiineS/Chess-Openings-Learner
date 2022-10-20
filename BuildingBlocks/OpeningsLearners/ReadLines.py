@@ -47,8 +47,7 @@ def read_lines(location):
 
     return lines
 
-# TODO delete
-print(read_lines("BuildingBlocks/OpeningsLearners/Lines/clean_lines.txt"))
+# print(read_lines("BuildingBlocks/OpeningsLearners/Lines/clean_lines.txt"))
 
 
 def lines_to_board_states(list_of_lines):
@@ -58,6 +57,10 @@ def lines_to_board_states(list_of_lines):
         pass
 
     return None
+
+
+
+
 
 
 

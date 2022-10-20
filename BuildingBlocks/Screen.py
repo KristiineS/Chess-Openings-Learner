@@ -10,12 +10,12 @@ def update_screen(board, game, settings):
             if board[i][j].piece:
                 board[i][j].display_piece(settings.tile_size, settings.dict_of_pictures)
             if board[i][j].marked:
-                board[i][j].display_move_dots(settings.tile_size, settings.player_color)
+                board[i][j].display_move_dots(settings.tile_size, settings.player)
             if board[i][j].promotions:
                 board[i][j].display_promotion_options(settings.tile_size, settings.dict_of_pictures)
-            if (i == 0 and settings.player_color) or (i == 7 and not settings.player_color):
+            if (i == 0 and settings.player) or (i == 7 and not settings.player):
                 board[i][j].display_tile_number(settings.tile_size, settings.white_tile_color, settings.black_tile_color)
-            if (j == 0 and settings.player_color) or (j == 7 and not settings.player_color):
+            if (j == 0 and settings.player) or (j == 7 and not settings.player):
                 board[i][j].display_tile_letter(settings.tile_size, settings.white_tile_color, settings.black_tile_color)
 
 

@@ -15,8 +15,8 @@ class Square:
         self.y = y
 
         # Square corner in pixels
-        self.x_coordinate = x * settings.tile_size if settings.player_color else (7 - x) * settings.tile_size
-        self.y_coordinate = y * settings.tile_size if settings.player_color else (7 - y) * settings.tile_size
+        self.x_coordinate = x * settings.tile_size if settings.player else (7 - x) * settings.tile_size
+        self.y_coordinate = y * settings.tile_size if settings.player else (7 - y) * settings.tile_size
 
         self.letter = str(list(string.ascii_lowercase)[x])  # A-H tile letter
         self.number = str(y + 1)  # 1-8 tile number

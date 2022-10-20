@@ -101,6 +101,6 @@ class Knight:
             # 2 left down
             if 0 <= self.y - 1 and board[self.x - 2][self.y - 1].piece and \
                     board[self.x - 2][self.y - 1].piece.color != self.color:
-                        possible_captures.append((self.x - 2, self.y - 1))
+                possible_captures.append((self.x - 2, self.y - 1))
 
         return possible_captures

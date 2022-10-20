@@ -8,9 +8,9 @@ from BuildingBlocks.MoveLogic import drag_piece
 
 
 def response_move(board, game, settings, opening_lines):
-    ai_color = "black" if game.player_color else "white"
-    promotion_row = 1 if game.player_color else 6
-    en_passant_row = 3 if game.player_color else 4
+    ai_color = "black" if game.player else "white"
+    promotion_row = 1 if game.player else 6
+    en_passant_row = 3 if game.player else 4
     all_possible_board_states = []
 
     for i in range(8):
@@ -74,4 +74,4 @@ def response_move(board, game, settings, opening_lines):
                                     deepcopy(all_possible_board_states[random_choice][1])
         return random_game, random_board
     else:
-        print("Läbi!")
+        print("Finished!")

@@ -1,21 +1,17 @@
-! TODO !
-+ Bug - clicking not working instantly after dragging
-Bug - En passant response error
-Rework drag_piece
-
-
 ! Moves !
-Check - notation, castling, check on king, movement of king, movement of pinned pieces
-        # TODO - if king in one of them, move the king OR BLOCK THE CHECK (try/catch)
-        #  mark the move as check
-        #  if king is moved, always check if it is not moved into a checked square
+Check
+    # castling check for all
+    # king movement (check before)
+    # allow for movement only if not in check
+    # otherwise move king or block (try/catch)
+    # allow movement only if not ending in check
 (Checkmate)
 
 
 ! Other !
-(!) Move notation for all (check(+), checkmate(#), ambiguous)
-Check fire in a different manner, not in a list by Game.py
-Combine player color and player color name
+(!) Move notation for all (checkmate(#), ambiguous)
+Check bug - notation too early or late, no notation for black
+En passant bug - from last_moved_piece to something else
 
 
 ! Visual !

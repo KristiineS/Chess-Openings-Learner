@@ -5,11 +5,11 @@ import pyglet
 
 
 class Settings:
-    def __init__(self, player_color: bool, possible_moves_color: str, possible_captures_color: str,
+    def __init__(self, player: bool, possible_moves_color: str, possible_captures_color: str,
                  possible_castling_color: str, possible_promotions_color: str, possible_en_passant_color: str,
                  last_move_color: str, tile_size: int, white_tile_color: str, black_tile_color: str):
-        self.player_color = player_color  # True: white, False: black
-        self.player_color_name = "white" if player_color else "black"
+        self.player = player  # True: white, False: black
+        self.player_color_name = "white" if player else "black"
 
         # possible moves colors
         self.possible_moves_color = possible_moves_color

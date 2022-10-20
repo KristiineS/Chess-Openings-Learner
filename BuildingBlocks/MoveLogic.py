@@ -5,8 +5,8 @@ from BuildingBlocks.ShowPossibleMoves import show_possible_moves, show_possible_
 
 def drag_piece(game, board, settings, start_piece_square, end_piece_square, x, y):
     move_number = game.move_number
-    promotion_row = 6 if game.player_color else 1
-    en_passant_row = 4 if game.player_color else 3
+    promotion_row = 6 if game.player else 1
+    en_passant_row = 4 if game.player else 3
     # If a promotion is in process, select the chosen piece
     if game.pawn_promotion:
         update_pawn_promotion(game, board, settings.tile_size, end_piece_square, x, y)
@@ -59,8 +59,8 @@ def drag_piece(game, board, settings, start_piece_square, end_piece_square, x, y
 
 def click_piece(game, board, settings, selected_square, x, y):
     move_number = game.move_number
-    promotion_row = 6 if game.player_color else 1
-    en_passant_row = 4 if game.player_color else 3
+    promotion_row = 6 if game.player else 1
+    en_passant_row = 4 if game.player else 3
     # If a promotion is in process, select the chosen piece
     if game.pawn_promotion:
         update_pawn_promotion(game, board, settings.tile_size, selected_square, x, y)
@@ -107,7 +107,7 @@ def click_piece(game, board, settings, selected_square, x, y):
                                 promote(board, selected_square.x, selected_square.y, game)
                                 game.move_piece = None
                 # Data for en passant
-                if move_number > 2 and game.move_piece.y == en_passant_row:
+                elif move_number > 2 and game.move_piece.y == en_passant_row:
                     last_moved_piece = game.black_moves[move_number // 2 - 1] if game.whose_turn else game.white_moves[
                         move_number // 2]
                     possible_en_passant = game.move_piece.possible_en_passant(last_moved_piece, game.board_states[move_number - 2])[0]
