@@ -5,7 +5,7 @@ import pyglet
 from BuildingBlocks.Classes.Game import Game
 from BuildingBlocks.Initialize import initialize_board, initialize_pieces
 from BuildingBlocks.OpeningsLearners.ResponseMoves import response_move
-from BuildingBlocks.OpeningsLearners.ReadLines import read_lines
+from BuildingBlocks.OpeningsLearners.ReadLines import clean_lines
 from BuildingBlocks.Screen import update_screen, click_square
 from BuildingBlocks.Classes.Settings import Settings
 from BuildingBlocks.MoveLogic import drag_piece, click_piece
@@ -29,7 +29,7 @@ start_pos_x, start_pos_y, stop_pos_x, stop_pos_y = 0, 0, 0, 0
 # Initialize the game
 game = Game(player_color_name=settings.player_color_name)  # playing with white
 game.board_states[0] = deepcopy(board)
-lines = read_lines("BuildingBlocks/OpeningsLearners/Lines/clean_lines.txt")
+lines = clean_lines("BuildingBlocks/OpeningsLearners/Lines/clean_lines.txt")
 opening_lines = lines
 
 
