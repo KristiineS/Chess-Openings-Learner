@@ -12,6 +12,7 @@ Check
 (!) Move notation for all (checkmate(#), ambiguous)
 Check bug - notation too early or late, no notation for black
 En passant bug - from last_moved_piece to something else
+(!) List to Numpy where possible
 
 
 ! Visual !

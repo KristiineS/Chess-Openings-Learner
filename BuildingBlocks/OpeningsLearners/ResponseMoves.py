@@ -5,6 +5,7 @@ import numpy as np
 
 from BuildingBlocks.Move import promote
 from BuildingBlocks.MoveLogic import drag_piece
+from BuildingBlocks.OpeningsLearners.ReadLines import board_to_matrix
 
 
 def response_move(board, game, settings, opening_lines):
@@ -69,9 +70,13 @@ def response_move(board, game, settings, opening_lines):
                         all_possible_board_states.append((game_copy, board_copy))
 
     if len(all_possible_board_states) != 0:
-        random_choice = randint(0, len(all_possible_board_states) - 1)
-        random_game, random_board = deepcopy(all_possible_board_states[random_choice][0]), \
-                                    deepcopy(all_possible_board_states[random_choice][1])
-        return random_game, random_board
-    else:
-        print("Finished!")
+        all_valid_board_states = [(game, board) for (game, board) in all_possible_board_states if
+                                  board_to_matrix(board) in opening_lines]
+        if len(all_valid_board_states) > 0:
+            random_choice = randint(0, len(all_valid_board_states) - 1)
+            random_game, random_board = deepcopy(all_valid_board_states[random_choice][0]), \
+                                        deepcopy(all_valid_board_states[random_choice][1])
+            return random_game, random_board
+        else:
+            print("Finished!")
+            return None, None

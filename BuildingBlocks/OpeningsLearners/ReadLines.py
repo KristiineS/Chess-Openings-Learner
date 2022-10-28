@@ -51,25 +51,25 @@ def clean_lines(location):
             else:
                 lines.append(info)
                 info = []
-
+    lines.append(info)
     return lines
 
 
-list_of_lines = clean_lines("Lines/clean_lines.txt")
+# list_of_lines = clean_lines("Lines/clean_lines.txt")
 
 
-# ["White: King's Indian", 'Black: Anti', '1. d4 Nf6 2. c4 g6 3. d5']
-def lines_to_board_states(list_of_lines):
-    print(list_of_lines)
+def lines_to_board_states(array_of_lines):
+    line_names = []
     board_state_lines = []
-    for line in list_of_lines:
+    board_state_strings = []
+    for line in array_of_lines:
         # Get line name(s)
         if len(line) == 2:
-            line_name = line[0]
+            line_names.append(line[0])
         else:
-            line_name = (line[0], line[1])
+            line_names.append((line[0], line[1]))
+
         board_states = [state for state in line[-1].split() if "." not in state]
-        print(board_states)
 
         # Initializations
         class Settings:
@@ -86,31 +86,34 @@ def lines_to_board_states(list_of_lines):
         game.board_states[0] = deepcopy(board)
         # Transfer moves to board states
         line_states = [board]
+        line_state_strings = [board_to_matrix(board)]
         for i in range(0, len(board_states)):
             board_state = board_states[i].strip("+").strip("#")
             color = "white" if i % 2 == 0 else "black"
             # e4, Bg5, Bxg4, 0-0, 0-0-0, h7=Q, hxg8=Q
             if re.match(r"^(R).*$", board_state):
-                move_or_capture(game, board, settings, board_state, "Rook", color)
+                game, board = move_or_capture(game, board, settings, board_state, "Rook", color)
             elif re.match(r"^(N).*$", board_state):
-                move_or_capture(game, board, settings, board_state, "Knight", color)
+                game, board = move_or_capture(game, board, settings, board_state, "Knight", color)
             elif re.match(r"^(B).*$", board_state):
-                move_or_capture(game, board, settings, board_state, "Bishop", color)
+                game, board = move_or_capture(game, board, settings, board_state, "Bishop", color)
             elif re.match(r"^(Q).*$", board_state):
-                move_or_capture(game, board, settings, board_state, "Queen", color)
+                game, board = move_or_capture(game, board, settings, board_state, "Queen", color)
             elif re.match(r"^(K).*$", board_state):
-                move_or_capture(game, board, settings, board_state, "King", color)
+                game, board = move_or_capture(game, board, settings, board_state, "King", color)
             elif re.match(r"(O-O).*$", board_state):
-                castle(game, board, settings, board_state, "King", color)
+                game, board = castle(game, board, settings, board_state, "King", color)
             elif "=" in board_state:
                 print("Promote (with capture)")
             else:
-                move_or_capture(game, board, settings, board_state, "Pawn", color)
+                game, board = move_or_capture(game, board, settings, board_state, "Pawn", color)
             line_states.append(board)
-        print()
-        board_state_lines.append((line_name, line_states))
+            line_state_strings.append(board_to_matrix(board))
 
-    return board_state_lines
+        board_state_lines.append(line_states)
+        board_state_strings.append(line_state_strings)
+
+    return line_names, board_state_lines, board_state_strings
 
 
 # TODO - en passant
@@ -118,11 +121,9 @@ def move_or_capture(game, board, settings, move_name, move_piece, move_color):
     alphabet = string.ascii_lowercase
     if "x" in move_name:
         move_name = move_name.split("x")[-1]
-        done_thingy = " captured "
         captures = True
     else:
         move_name = move_name[-2:]
-        done_thingy = " moved "
         captures = False
     for i in range(8):
         for j in range(8):
@@ -132,15 +133,13 @@ def move_or_capture(game, board, settings, move_name, move_piece, move_color):
                     movement = board[i][j].piece.possible_captures(board) if captures else board[i][
                         j].piece.possible_moves(board)
                     if (end_i, end_j) in movement:
-                        print(str(i) + " " + str(j) + done_thingy + move_piece)
                         drag_piece(game, board, settings, board[i][j], board[end_i][end_j], 0, 0)
 
     return game, board
 
 
 def castle(game, board, settings, board_state, move_piece, move_color):
-    length = 2 if len(board_state) == 3 else 3 # short or long castles
-    done_thingy = " short castles" if length == 2 else " long castles"
+    length = 2 if len(board_state) == 3 else 3  # short or long castles
     for i in range(8):
         for j in range(8):
             if board[i][j].piece:
@@ -149,12 +148,44 @@ def castle(game, board, settings, board_state, move_piece, move_color):
                     for movement in castle_to:
                         if abs(movement[2][0] - movement[3][0]) == length:
                             end_i, end_j = movement[0][0], movement[0][1]
-                            print(str(i) + " " + str(j) + done_thingy)
                             drag_piece(game, board, settings, board[i][j], board[end_i][end_j], 0, 0)
     return game, board
 
 
-lines_to_board_states(list_of_lines)
+# TODO - def promotion()
+
+
+# lines_to_board_states(list_of_lines)
+
+
+# empty = 00, piece = 1(white) or 2(black) + type = 123456 (bishop, king, knight, pawn, queen, rook)
+def board_to_matrix(board):
+    string = ""
+    for i in range(8):
+        for j in range(8):
+            if board[i][j].piece:
+                if board[i][j].piece.name == "Bishop":
+                    string += "11" if board[i][j].piece.color == "white" else "21"
+                elif board[i][j].piece.name == "King":
+                    string += "12" if board[i][j].piece.color == "white" else "22"
+                elif board[i][j].piece.name == "Knight":
+                    string += "13" if board[i][j].piece.color == "white" else "23"
+                elif board[i][j].piece.name == "Pawn":
+                    string += "14" if board[i][j].piece.color == "white" else "24"
+                elif board[i][j].piece.name == "Queen":
+                    string += "15" if board[i][j].piece.color == "white" else "25"
+                else:
+                    string += "16" if board[i][j].piece.color == "white" else "26"
+            else:
+                string += "00"
+
+    return string
+
+
+
+
+
+
 
 
 # # board, move == e8=Q, move_piece_color == "white"
@@ -179,5 +210,3 @@ lines_to_board_states(list_of_lines)
 #                         board[x][y].piece = Bishop(x, y, move_piece_color)
 #                     board[i][j].piece = None
 #                     return board
-#
-#
