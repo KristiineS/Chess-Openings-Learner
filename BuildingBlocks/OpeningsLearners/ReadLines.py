@@ -8,7 +8,7 @@ from BuildingBlocks.MoveLogic import drag_piece
 
 
 # Function to clean the file containing the opening lines.txt
-def pgn_to_txt(old_location, new_location):
+def pgn_to_txt_file(old_location, new_location):
     memory = ""
     with open(old_location, "r", encoding="utf-8") as old_file, open(new_location, 'r+', encoding="utf-8") as new_file:
         for line in old_file:
@@ -35,12 +35,11 @@ def pgn_to_txt(old_location, new_location):
             new_file.write(memory)
             new_file.write("\n")
 
-
 # pgn_to_txt("Lines/all_lines.txt", "Lines/clean_lines.txt")
 
 
 # Returns lists of 2-3 elements: name(s), line separated by commas
-def clean_lines(location):
+def lines_to_arrays(location):
     lines = []
 
     with open(location, "r", encoding="utf-8") as f:
@@ -54,66 +53,74 @@ def clean_lines(location):
     lines.append(info)
     return lines
 
-
 # list_of_lines = clean_lines("Lines/clean_lines.txt")
 
 
-def lines_to_board_states(array_of_lines):
-    line_names = []
-    board_state_lines = []
-    board_state_strings = []
-    for line in array_of_lines:
-        # Get line name(s)
-        if len(line) == 2:
-            line_names.append(line[0])
-        else:
-            line_names.append((line[0], line[1]))
-
-        board_states = [state for state in line[-1].split() if "." not in state]
-
-        # Initializations
-        class Settings:
-            def __init__(self):
-                self.tile_size = 60
-                self.player = True
-                self.player_color_name = "white"
-
-        settings = Settings()
-        board = initialize_board(settings)
-        initialize_pieces(board, "white")
-        initialize_pieces(board, "black")
-        game = Game(player_color_name=settings.player_color_name)  # playing with white
-        game.board_states[0] = deepcopy(board)
-        # Transfer moves to board states
-        line_states = [board]
-        line_state_strings = [board_to_matrix(board)]
-        for i in range(0, len(board_states)):
-            board_state = board_states[i].strip("+").strip("#")
-            color = "white" if i % 2 == 0 else "black"
-            # e4, Bg5, Bxg4, 0-0, 0-0-0, h7=Q, hxg8=Q
-            if re.match(r"^(R).*$", board_state):
-                game, board = move_or_capture(game, board, settings, board_state, "Rook", color)
-            elif re.match(r"^(N).*$", board_state):
-                game, board = move_or_capture(game, board, settings, board_state, "Knight", color)
-            elif re.match(r"^(B).*$", board_state):
-                game, board = move_or_capture(game, board, settings, board_state, "Bishop", color)
-            elif re.match(r"^(Q).*$", board_state):
-                game, board = move_or_capture(game, board, settings, board_state, "Queen", color)
-            elif re.match(r"^(K).*$", board_state):
-                game, board = move_or_capture(game, board, settings, board_state, "King", color)
-            elif re.match(r"(O-O).*$", board_state):
-                game, board = castle(game, board, settings, board_state, "King", color)
-            elif "=" in board_state:
-                print("Promote (with capture)")
+def clean_lines_with_board_states(old_location, new_location):
+    with open(old_location, "r", encoding="utf-8") as old_file, open(new_location, 'r+', encoding="utf-8") as new_file:
+        for line in old_file:
+            if "1. " not in line.strip():
+                new_file.write(line)
             else:
-                game, board = move_or_capture(game, board, settings, board_state, "Pawn", color)
-            line_states.append(board)
-            line_state_strings.append(board_to_matrix(board))
+                new_file.write(line)
+                board_states = [state for state in line.split() if "." not in state]
+                _, line_state_strings = line_to_board_state(board_states)
+                new_file.write(str(line_state_strings))
+                new_file.write("\n")
 
-        board_state_lines.append(line_states)
-        board_state_strings.append(line_state_strings)
 
-    return line_names, board_state_lines, board_state_strings
+def line_info_into_variables(array_of_lines):
+    line_names = []
+    state_strings = []
+    for line in array_of_lines:
+        line_names.append(line[0]) if len(line) == 3 else line_names.append((line[0], line[1])) # Get line name(s)
+        new_list = line[-1].strip("[]'").split("', '")
+        state_strings.append(new_list) # Get the board Strings
+
+    return line_names, state_strings
+
+
+def line_to_board_state(board_states):
+    # Initializations
+    class Settings:
+        def __init__(self):
+            self.tile_size = 60
+            self.player = True
+            self.player_color_name = "white"
+    settings = Settings()
+    board = initialize_board(settings)
+    initialize_pieces(board, "white")
+    initialize_pieces(board, "black")
+    game = Game(player_color_name=settings.player_color_name)  # playing with white
+    game.board_states[0] = deepcopy(board)
+    # Transfer moves to board states
+    line_states = [board]
+    line_state_strings = [board_to_matrix(board)]
+
+    for i in range(0, len(board_states)):
+        board_state = board_states[i].strip("+").strip("#")
+        color = "white" if i % 2 == 0 else "black"
+        # e4, Bg5, Bxg4, 0-0, 0-0-0, h7=Q, hxg8=Q
+        if re.match(r"^(R).*$", board_state):
+            game, board = move_or_capture(game, board, settings, board_state, "Rook", color)
+        elif re.match(r"^(N).*$", board_state):
+            game, board = move_or_capture(game, board, settings, board_state, "Knight", color)
+        elif re.match(r"^(B).*$", board_state):
+            game, board = move_or_capture(game, board, settings, board_state, "Bishop", color)
+        elif re.match(r"^(Q).*$", board_state):
+            game, board = move_or_capture(game, board, settings, board_state, "Queen", color)
+        elif re.match(r"^(K).*$", board_state):
+            game, board = move_or_capture(game, board, settings, board_state, "King", color)
+        elif re.match(r"(O-O).*$", board_state):
+            game, board = castle(game, board, settings, board_state, "King", color)
+        elif "=" in board_state:
+            print("Promote (with capture)")
+        else:
+            game, board = move_or_capture(game, board, settings, board_state, "Pawn", color)
+        line_states.append(board)
+        line_state_strings.append(board_to_matrix(board))
+
+    return line_states, line_state_strings
 
 
 # TODO - en passant
@@ -153,9 +160,8 @@ def castle(game, board, settings, board_state, move_piece, move_color):
 
 
 # TODO - def promotion()
-
-
-# lines_to_board_states(list_of_lines)
+def promotion(game, board, settings, board_state, move_piece, move_color):
+    pass
 
 
 # empty = 00, piece = 1(white) or 2(black) + type = 123456 (bishop, king, knight, pawn, queen, rook)
@@ -182,9 +188,7 @@ def board_to_matrix(board):
     return string
 
 
-
-
-
+# clean_lines_with_board_states("/Users/kristi/Documents/Programming/Chess-Openings-Learner/BuildingBlocks/OpeningsLearners/Lines/clean_lines.txt", "Lines/lines_and_board_states.txt")
 
 
 

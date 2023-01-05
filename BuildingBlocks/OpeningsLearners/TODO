@@ -4,7 +4,8 @@ TODO:
 + 3) Opening lines to board states
 + 4) Match the possible moves to opening lines
 (+) 5) Select one at random (later by weights or by history)
-(+) 6) Check if line is finished
-
++ 6) Check if line is finished
 6.5) Promotion and en passant in openings
-7) Check the validity of the players' move
++ 7) Check the validity of the players' move
+8) Print out possible moves
+9) Group by White's/Black's opening (by name), group by 2+

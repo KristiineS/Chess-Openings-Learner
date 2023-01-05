@@ -8,11 +8,12 @@ from BuildingBlocks.MoveLogic import drag_piece
 from BuildingBlocks.OpeningsLearners.ReadLines import board_to_matrix
 
 
-def response_move(board, game, settings, opening_lines):
-    ai_color = "black" if game.player else "white"
+def possible_legal_moves(board, game, settings):
+    ai_color = "white" if game.whose_turn else "black"
     promotion_row = 1 if game.player else 6
     en_passant_row = 3 if game.player else 4
     all_possible_board_states = []
+    all_possible_game_states = []
 
     for i in range(8):
         for j in range(8):
@@ -41,7 +42,8 @@ def response_move(board, game, settings, opening_lines):
                                     game_copy.move_piece = None
                                     drag_piece(game_copy, board_copy, settings, board_copy[i][j], promotion_square,
                                                x_options[k], y_options[k])
-                                    all_possible_board_states.append((game_copy, board_copy))
+                                    all_possible_board_states.append(board_copy)
+                                    all_possible_game_states.append(game_copy)
 
                     elif game.move_number > 2 and board[i][j].piece.y == en_passant_row:
                         last_moved_piece = game.black_moves[game.move_number // 2 - 1] if game.whose_turn \
@@ -55,7 +57,8 @@ def response_move(board, game, settings, opening_lines):
                     game_copy.move_piece = board[i][j].piece
                     drag_piece(game_copy, board_copy, settings, board[i][j], board[coordinates[0]][coordinates[1]], 0,
                                0)
-                    all_possible_board_states.append((game_copy, board_copy))
+                    all_possible_board_states.append(board_copy)
+                    all_possible_game_states.append(game_copy)
 
                 # Check both possible castling moves
                 if board[i][j].piece.name == "King":
@@ -67,16 +70,28 @@ def response_move(board, game, settings, opening_lines):
                         game_copy.move_piece = board[i][j].piece
                         drag_piece(game_copy, board_copy, settings, board[coordinates[1][0]][coordinates[1][1]],
                                    board[coordinates[0][0]][coordinates[0][1]], 0, 0)
-                        all_possible_board_states.append((game_copy, board_copy))
+                        all_possible_board_states.append(board_copy)
+                        all_possible_game_states.append(game_copy)
+    return all_possible_board_states, all_possible_game_states
 
+
+def response_move(all_possible_board_states, all_possible_game_states, opening_lines):
     if len(all_possible_board_states) != 0:
-        all_valid_board_states = [(game, board) for (game, board) in all_possible_board_states if
-                                  board_to_matrix(board) in opening_lines]
+        print("All: ", len(all_possible_board_states))
+        all_valid_board_states = []
+        all_valid_game_states = []
+        for i in range(len(all_possible_board_states)):
+            if board_to_matrix(all_possible_board_states[i]) in opening_lines:
+                all_valid_board_states.append(all_possible_board_states[i])
+                all_valid_game_states.append(all_possible_game_states[i])
+        print("Valid: ", len(all_valid_board_states))
         if len(all_valid_board_states) > 0:
             random_choice = randint(0, len(all_valid_board_states) - 1)
-            random_game, random_board = deepcopy(all_valid_board_states[random_choice][0]), \
-                                        deepcopy(all_valid_board_states[random_choice][1])
-            return random_game, random_board
+            random_board, random_game = deepcopy(all_valid_board_states[random_choice]), \
+                                        deepcopy(all_valid_game_states[random_choice])
+            return random_board, random_game
         else:
             print("Finished!")
-            return None, None
+            return None
+
+

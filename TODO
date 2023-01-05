@@ -13,6 +13,7 @@ Check
 Check bug - notation too early or late, no notation for black
 En passant bug - from last_moved_piece to something else
 (!) List to Numpy where possible
+ReadLine - input check for clean_lines.txt
 
 
 ! Visual !
