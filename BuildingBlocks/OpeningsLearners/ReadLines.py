@@ -1,6 +1,6 @@
 import re
 import string
-from copy import deepcopy
+from copy import deepcopy, copy
 
 from BuildingBlocks.Classes.Game import Game
 from BuildingBlocks.Initialize import initialize_board, initialize_pieces
@@ -20,11 +20,11 @@ def pgn_to_txt_file(old_location, new_location):
                         new_file.write("\n")
                         new_file.write("\n")
                         memory = ""
-                    new_file.write("<b>White:</b> " + re.search('"([^"]*)"', line)[1].strip())
+                    new_file.write(re.search('"([^"]*)"', line)[1].strip())
                     new_file.write("\n")
                 # Write the name of the black line
                 elif "[Black" in line.strip():
-                    new_file.write("<b>Black:</b> " + re.search('"([^"]*)"', line)[1])
+                    new_file.write(re.search('"([^"]*)"', line)[1])
                     new_file.write("\n")
                 elif not re.match(r"^(\n).*$", line):
                     if memory:
@@ -35,7 +35,7 @@ def pgn_to_txt_file(old_location, new_location):
             new_file.write(memory)
             new_file.write("\n")
 
-# pgn_to_txt_file("Lines/all_lines.txt", "Lines/clean_html_lines.txt")
+pgn_to_txt_file("Lines/all_lines.txt", "Lines/clean_html_lines.txt")
 
 
 # Returns lists of 2-3 elements: name(s), line separated by commas
@@ -56,43 +56,59 @@ def lines_to_arrays(location):
 lineArray = lines_to_arrays("Lines/clean_html_lines.txt")
 
 
+# Find repeating lines (by white)
 def find_repetitions(line_array):
     seen = set()
     repeated = set()
     for listike in line_array:
-      for line in set(listike):
-        if line in seen:
-          repeated.add(line)
+        if listike[0] in seen:
+            repeated.add(listike[0])
         else:
-          seen.add(line)
-    return list(repeated)
+            seen.add(listike[0])
+    return sorted(list(repeated))
 
 repeated = find_repetitions(lineArray)
 
 
-repeated_lines_names = {}
-for line in lineArray:
-    for name in repeated:
-        if name in line:
-            if name in repeated_lines_names:
-                repeated_lines_names[name] += 1
-            else:
-                repeated_lines_names[name] = 1
+# Find the shortest name for the opening (e.g. Vienna, not Vienna game or gambit)
+def unique_line_names(repeated):
+    repeats = copy(repeated)
+    for i in range(len(repeated)-1):
+        for j in range(i+1, len(repeated)):
+            if (repeated[i] in repeated[j] or repeated[j] in repeated[i]) and (repeated[0:5] == repeated[0:5]):
+                longer = repeated[i] if len(repeated[i]) > len(repeated[j]) else repeated[j]
+                if longer in repeats:
+                    repeats.remove(longer)
+    return repeats
 
-for line in lineArray:
-    if line[0] in repeated_lines_names and line[1] in repeated_lines_names:
-        if repeated_lines_names[line[0]] > repeated_lines_names[line[1]]:
-            repeated_lines_names.pop(line[1])
-        else:
-            repeated_lines_names.pop(line[0])
+name_set = unique_line_names(repeated)
 
-name_set = set(repeated_lines_names)
+
+# def get_repeated_line_names(lines, repeated):
+#     repeated_lines_names = {}
+#     for line in lines:
+#         for name in repeated:
+#             if name in line:
+#                 if name in repeated_lines_names:
+#                     repeated_lines_names[name] += 1
+#                 else:
+#                     repeated_lines_names[name] = 1
+#
+#     for line in lines:
+#         if line[0] in repeated_lines_names and line[1] in repeated_lines_names:
+#             if repeated_lines_names[line[0]] > repeated_lines_names[line[1]]:
+#                 repeated_lines_names.pop(line[1])
+#             else:
+#                 repeated_lines_names.pop(line[0])
+#     return sorted(set(repeated_lines_names))
+
+# name_set = get_repeated_line_names(lineArray, repeats)
 
 
 def lines_to_html(new_location, lines, openings):
     with open(new_location, 'r+', encoding="utf-8") as new_file:
         counter = 0
-        # TODO - iterate over all opening groups (apart from single lines)
+        line_ids = []
         for line_name in openings:
             new_file.write("<li>")
             new_file.write("\n")
@@ -101,15 +117,18 @@ def lines_to_html(new_location, lines, openings):
             new_file.write("\n")
             new_file.write('<label for="' + line_name + '">')
             new_file.write("\n")
-            new_file.write(line_name)
+            new_file.write("<b>" + line_name + "</b>")
             new_file.write("\n")
             new_file.write('</label>')
             new_file.write("\n")
-            new_file.write('<ul>')
+            new_file.write('<button type="button" class="btn btn-no-outline collapsed dropdown-toggle" data-toggle="collapse" data-target="#'+ 'toggle' + str(counter) +'"></button>')
+            new_file.write("\n")
+            new_file.write('<ul class="collapse hide" id="'+ "toggle" + str(counter) +'">')
             new_file.write("\n")
 
             for line in lines:
-                if line[0] == line_name or line[1] == line_name:
+                if line[0] in line_name or line_name in line[0]:
+                    line_ids.append(line[0]+" "+line[-1])
                     new_file.write("<li>")
                     new_file.write("\n")
                     new_file.write('<input type="checkbox" id="' + line[-1] + '-of-' + line_name +
@@ -117,16 +136,12 @@ def lines_to_html(new_location, lines, openings):
                     new_file.write("\n")
                     new_file.write('<label for="' + line[-1] + '-of-' + line_name + '">')
                     new_file.write("\n")
-                    new_file.write(str(line[0]))
-                    new_file.write("\n")
+                    new_file.write("<b>" + str(line[0]) + "</b>")
+                    if len(line) == 3:
+                        new_file.write("<b>" + ", " + str(line[1]) + "</b>")
+                        new_file.write("\n")
                     new_file.write('<br>')
                     new_file.write("\n")
-                    if len(line) == 3:
-                        new_file.write(str(line[1]))
-                        new_file.write("\n")
-                        new_file.write('<br>')
-                        new_file.write("\n")
-
                     new_file.write(str(line[-1]))
                     new_file.write("\n")
                     new_file.write('</label>')
@@ -138,9 +153,15 @@ def lines_to_html(new_location, lines, openings):
             new_file.write("\n")
             new_file.write("</li>")
             new_file.write("\n\n")
+            counter += 1
+        new_thingy = []
+        for line in lines:
+            name = line[0]+" "+line[-1]
+            if name not in line_ids:
+                print(name)
+        print(len(new_thingy))
 
 lines_to_html("Lines/html_grouped.txt", lineArray, name_set)
-
 
 def clean_lines_with_board_states(old_location, new_location):
     with open(old_location, "r", encoding="utf-8") as old_file, open(new_location, 'r+', encoding="utf-8") as new_file:
