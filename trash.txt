@@ -1,0 +1,31 @@
+<li>
+  <input type="checkbox" id="1" name="openings" value="1. g4 d5 2. Bg2 c6 3. g5" onclick="checkChildren(this)" checked>
+  <label for="1">
+    <b>White:</b> Grob
+  </label>
+  <ul>
+
+    <li>
+      <input type="checkbox" id="2" name="openings" value="1. g4 d5 2. Bg2 c6 3. g5" onclick="checkChildren(this)" checked>
+      <label for="2">
+        <b>White:</b> Grob
+        <br>
+        <b>Black:</b> Spike attack
+        <br>
+        1. g4 d5 2. Bg2 c6 3. g5
+      </label>
+    </li>
+
+    <li>
+      <input type="checkbox" id="3" name="openings" value="1. g4 d5 2. Bg2 c6 3. g5" onclick="checkChildren(this)" checked>
+      <label for="3">
+        <b>White:</b> Grob
+        <br>
+        <b>Black:</b> Fritz gambit
+        <br>
+        1. g4 d5 2. Bg2 Bxg4 3. c4
+      </label>
+    </li>
+
+  </ul>
+</li>

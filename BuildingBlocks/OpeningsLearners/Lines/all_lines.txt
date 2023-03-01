@@ -7136,20 +7136,20 @@ Nxe4 8. O-O Bxc3 9. d5 Bf6 10. Re1 Ne7 11. Rxe4 d6 12. g4
 1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6
 
 [Site "C55"]
-[White "Giuoco piano"]
+[White "Giuoco Piano"]
 [Black "Rosentreter Variation "]
 
 1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. O-O Bc5 5. d4 Bxd4 6. Nxd4 Nxd4 7. Bg5 h6
 8. Bh4 g5 9. f4
 
 [Site "C55"]
-[White "Giuoco piano"]
+[White "Giuoco Piano"]
 
 1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. O-O Bc5 5. d4 Bxd4 6. Nxd4 Nxd4 7. Bg5 d6
 
 
 [Site "C55"]
-[White "Giuoco piano"]
+[White "Giuoco Piano"]
 [Black "Holzhausen attack"]
 
 1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. O-O Bc5 5. d4 Bxd4 6. Nxd4 Nxd4 7. Bg5 d6
@@ -7911,7 +7911,7 @@ Bd7
 
 [Site "C77"]
 [White "Ruy Lopez"]
-[Black "Four knights (Tarr�3��� Variation "]
+[Black "Four knights (Tarrasch Variation)"]
 
 1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. Nc3
 
